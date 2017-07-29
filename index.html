@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#12100E" />
+    <!--<link rel="manifest" href="static/manifest.json" /> -->
+    <title>PLB web config</title>
+    <link href="static/css/app.css" rel="stylesheet" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="static/js/configscript.js"></script>
+  </head>
+  <body onload="init()">
+    <div id="wrapper">
+      <div class="head">
+        <a href="#" class="logo">
+          <img src="static/logo.png" alt="plb logo" />
+        </a>
+        <h1 class="text-center">PLB Config Generator</h1>
+      </div>
+      <div id="app" />
+	  <button name="init" onclick=printResponse()>Log Config in Console</button>
+	  <button name="parse" onclick=parseQuestions(defaultconfigtext)>Parse Config into Options WIP</button>
+    </div>
+  </body>
+</html>
