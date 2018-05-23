@@ -21,12 +21,14 @@ var method = 'GET';
 var xhr = createCORSRequest(method, url);
 var defaultconfigtext = null;
 var options = [];
+var githubconfig = null;
 
 function init() {
     xhr.onload = function() {
         defaultconfigtext = xhr.responseText;
         console.log("Default config loaded from GitHub successfully.");
-        parseQuestions(defaultconfigtext);
+        githubconfig = parseQuestions(defaultconfigtext);
+        buildElements(githubconfig)
     };
 
 	xhr.onerror = function() {
@@ -71,16 +73,53 @@ function parseQuestions(rawconfig) {
                 }
             categories[cat][setting] = option_body;
             }
+            option_body['description'] = option_body['description'].join("\n")
         }
     }
     console.log(categories); // For testing
-    return categories;
-};
+    return categories; 
+  }
 
-function buildElements(settings) { // Please help
-        arrayLength = settings.length;
+function buildElements(settings) {
+  console.log("buildinggggg")
+  var configdiv = document.getElementById('configs')
+  buildSettingTree(settings,configdiv)
+}
 
-    for (i = 0; i < arrayLength; i++) {
-      $('<div class="settings" />').text(settings[i]).appendTo('body');
-    }
+function buildSettingTree(setting, parentDiv){ // iterates through categories
+  if (!isDict(setting) && !isArray(setting)) {return}
+  for (i in setting) {
+    var innerDiv = document.createElement('div');
+    innerDiv.className = 'settings';
+    innerDiv.innerHTML = i
+    parentDiv.appendChild(innerDiv)
+    buildDescription(setting[i],innerDiv)
+  }
+}
+
+function buildDescription(cat, parentDiv){ //iterates through an array of settings
+  for (i in cat){
+    var innerDiv = document.createElement('div');// Print description
+    innerDiv.className = 'settings';
+    innerDiv.innerHTML = cat[i]['description']
+    parentDiv.appendChild(innerDiv)
+    buildSetting(cat[i],innerDiv)
+  }
+}
+
+function buildSetting(setting, parentDiv){ //only needs to do settings
+  for (set in setting['setting']){
+    var innerDiv = document.createElement('div');
+    innerDiv.className = 'settings';
+    innerDiv.innerHTML = set + ": <input type='text' name=set value='"+setting['setting'][set]+"' />"
+    parentDiv.appendChild(innerDiv)
+  }
+}
+
+function isDict(v) {
+    return typeof v==='object' && v!==null && !(v instanceof Array) && !(v instanceof Date)
+}
+
+function isArray(v) {
+  return Array.isArray(v)
 }
